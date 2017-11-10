@@ -1,6 +1,3 @@
-// Import css declarations for the report
-import './assets/main.css';
-
 // Importing '@leanix/reporting' makes the `lx` object globally available
 // IMPORTANT: Make sure lodash (window._) and jQuery (window.$) are globally available,
 // as they are required by @leanix/reporting. E.g via webpack.ProvidePlugin

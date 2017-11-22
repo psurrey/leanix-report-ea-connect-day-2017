@@ -1,3 +1,5 @@
+import * as Highcharts from 'highcharts';
+
 const RELATION_FRAGMENT = `
   relUserGroupToApplication {
     edges {
@@ -27,9 +29,56 @@ export class Report {
   render(data) {
     let completion = this.computeAverageCompletion(data);
     completion = completion.sort((a,b) => b.y - a.y);
+    this.createHighchart(completion);
+  }
 
-    const html = completion.map(c => `<p>${c.name}: ${c.y}</p>`).join('');
-    $('#report').html(html);
+  createHighchart(completion) {
+    const categories = completion.map((item) => item.name);
+    const options = this.buildHighchartsOptions(categories, completion);
+    Highcharts.chart('report', options);
+  }
+
+  buildHighchartsOptions(categories, completion) {
+    return {
+      chart: {
+        events: {},
+        type: 'bar',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+      },
+      plotOptions: {
+        series: {
+          allowPointSelect: false,
+          events: {
+            legendItemClick: function() { return false; }
+          }
+        }
+      },
+      tooltip: {
+        formatter: function() {
+          return '<b>'+ this.x +'</b>: '+ Highcharts.numberFormat(this.y, 2) +'%';
+      }
+      },
+      xAxis: {
+        categories,
+        tickInterval: null,
+        startOnTick: false,
+        labels: {
+          step: 1
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Average completion'
+        }
+      },
+      title: false,
+      series: [{
+        data: completion,
+        name: 'Completion'
+      }]
+    }
   }
 
   computeAverageCompletion(data) {

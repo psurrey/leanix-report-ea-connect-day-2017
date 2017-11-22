@@ -40,6 +40,7 @@
     "webpack-dev-server": "2.5.0"
   },
   "dependencies": {
-    "@leanix/reporting": "^0.2.0"
+    "@leanix/reporting": "^0.2.0",
+    "highcharts": "^5.0.6"
   }
 }
